@@ -1,0 +1,191 @@
+/* Cores e durações principais: personalize por aqui. */
+:root {
+  --cor-fundo: #10130f;
+  --cor-botao: #c4f76a;
+  --cor-botao-clara: #d9ff97;
+  --cor-texto: #edf0e8;
+  --cor-secundaria: #9ba392;
+  --duracao-pulso: 1.5s;
+  --duracao-rotacao: 700ms;
+}
+
+/* A propriedade numérica permite suavizar a saída em qualquer ponto do pulso. */
+@property --escala-pulso {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--cor-texto);
+  background: radial-gradient(ellipse at 50% 48%, #222b194d, transparent 55%), var(--cor-fundo);
+  font-family: "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(#c4f76a08 1px, transparent 1px), linear-gradient(90deg, #c4f76a08 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black, transparent 75%);
+}
+
+.cabecalho {
+  position: absolute;
+  top: 32px;
+  right: 40px;
+  left: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  color: var(--cor-secundaria);
+  font-size: 12px;
+}
+
+.marca { display: flex; align-items: center; gap: 10px; }
+.marca__simbolo { color: var(--cor-botao); font-size: 28px; line-height: 1; }
+.edicao { font-size: 10px; letter-spacing: 2px; }
+
+main {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 240px 24px;
+}
+
+.experiencia {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  text-align: center;
+}
+
+.introducao {
+  position: absolute;
+  bottom: calc(100% + 54px);
+  width: 100%;
+}
+
+.etiqueta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 22px;
+  color: var(--cor-secundaria);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.etiqueta span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cor-botao);
+  box-shadow: 0 0 10px #c4f76a55;
+}
+
+h1 { margin: 0; font-size: clamp(28px, 4vw, 38px); font-weight: 400; line-height: 1.2; letter-spacing: -1.4px; }
+h1 em { color: var(--cor-botao); font-family: Georgia, serif; font-weight: 400; }
+
+.area-botao {
+  --escala-pulso: 1;
+  width: 246px;
+  max-width: 100%;
+  border-radius: 20px;
+  transition: --escala-pulso 400ms ease;
+}
+
+/* Fora do hover a escala é 1; o movimento desaparece suavemente. */
+@media (hover: hover) {
+  .area-botao:hover { --escala-pulso: 1.07; }
+}
+
+.pulso { animation: pulsar var(--duracao-pulso) ease-in-out infinite; }
+.rotacao.girando { animation: girar var(--duracao-rotacao) cubic-bezier(.45, 0, .2, 1); }
+
+.botao {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 27px;
+  width: 100%;
+  min-height: 76px;
+  padding: 20px 28px;
+  border: 1px solid #e2ffb4;
+  border-radius: 20px;
+  color: #19220d;
+  background: linear-gradient(120deg, var(--cor-botao-clara), var(--cor-botao) 65%);
+  box-shadow: 0 4px 0 #7d9e43, 0 14px 42px #b6f75e14, inset 0 1px 0 #ffffff70;
+  font: 650 20px/1.3 "Segoe UI", Arial, sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow 350ms ease;
+}
+
+.botao:hover {
+  box-shadow: 0 4px 0 #7d9e43, 0 16px 64px #b6f75e36, inset 0 1px 0 #ffffff70;
+}
+
+.botao:focus-visible { outline: 3px solid var(--cor-texto); outline-offset: 8px; }
+.botao__icone { flex-shrink: 0; width: 24px; height: 24px; }
+
+.orientacoes { position: absolute; top: calc(100% + 43px); width: 100%; }
+.orientacoes p { margin: 0; color: var(--cor-secundaria); font-size: 14px; line-height: 1.8; }
+.orientacoes strong { color: #c8cebf; font-weight: 400; }
+.orientacoes .dica-teclado { margin-top: 22px; font-size: 10px; color: var(--cor-secundaria); }
+kbd { padding: 3px 5px; border: 1px solid #ffffff20; border-radius: 4px; font: inherit; }
+
+.rodape {
+  position: absolute;
+  right: 24px;
+  bottom: 26px;
+  left: 24px;
+  color: var(--cor-secundaria);
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: .3px;
+}
+
+.rodape span { margin-right: 5px; color: var(--cor-botao); }
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(var(--escala-pulso)); }
+}
+
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 540px) {
+  .cabecalho { top: 24px; right: 22px; left: 22px; }
+  .marca { font-size: 11px; }
+  .edicao { display: none; }
+  .dica-teclado { display: none; }
+  .introducao { bottom: calc(100% + 46px); }
+}
+
+/* Em telas baixas, a página pode rolar sem sobrepor o conteúdo. */
+@media (max-height: 600px) {
+  .rodape { position: static; padding: 0 24px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulso, .rotacao.girando { animation: none; }
+  .area-botao, .botao { transition: none; }
+}

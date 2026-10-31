@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10130f">
+  <meta name="description" content="Um pequeno experimento de interação: passe o mouse para pulsar e clique para girar.">
+  <title>Botão com Vida!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="cabecalho" aria-label="Identificação do experimento">
+    <span class="marca"><span class="marca__simbolo" aria-hidden="true">✳</span> laboratório de interações</span>
+    <span class="edicao">EXPERIMENTO / 01</span>
+  </header>
+
+  <main>
+    <section class="experiencia" aria-labelledby="titulo">
+      <div class="introducao">
+        <p class="etiqueta"><span aria-hidden="true"></span> PRONTO PARA INTERAGIR</p>
+        <h1 id="titulo">Um botão.<br>Um pouco de <em>vida.</em></h1>
+      </div>
+
+      <div class="area-botao">
+        <!-- Cada elemento cuida de um movimento: pulsação e rotação. -->
+        <div class="pulso">
+          <div class="rotacao">
+            <button class="botao" type="button" aria-describedby="instrucao">
+              <span>Clique aqui!</span>
+              <svg class="botao__icone" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="orientacoes">
+        <p id="instrucao">Passe o mouse para pulsar.<br><strong>Clique para dar uma volta.</strong></p>
+        <p class="dica-teclado">Ou pressione <kbd>Enter</kbd></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape"><span aria-hidden="true">↳</span> Pequeno gesto. Boa sensação.</footer>
+
+  <script>
+    const botao = document.querySelector('.botao');
+    const rotacao = document.querySelector('.rotacao');
+    const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    botao.addEventListener('click', () => {
+      // O botão nativo também dispara click com Enter e Espaço.
+      if (movimentoReduzido.matches || rotacao.classList.contains('girando')) return;
+      rotacao.classList.add('girando');
+    });
+
+    // Permite usar Enter mesmo quando o botão ainda não está em foco.
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key !== 'Enter' || evento.repeat || evento.target === botao) return;
+      evento.preventDefault();
+      botao.click();
+    });
+
+    function finalizarRotacao(evento) {
+      if (evento.target === rotacao && evento.animationName === 'girar') {
+        rotacao.classList.remove('girando');
+      }
+    }
+
+    rotacao.addEventListener('animationend', finalizarRotacao);
+    rotacao.addEventListener('animationcancel', finalizarRotacao);
+
+    // Evita manter a classe ativa se a preferência mudar durante uma volta.
+    movimentoReduzido.addEventListener('change', () => {
+      rotacao.classList.remove('girando');
+    });
+  </script>
+</body>
+</html>
